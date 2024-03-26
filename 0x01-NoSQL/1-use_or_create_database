@@ -1,0 +1,3 @@
+// Script to create a new MongoDB database named `my_db`
+
+use my_db
