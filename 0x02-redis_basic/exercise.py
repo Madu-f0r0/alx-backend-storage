@@ -20,6 +20,19 @@ def count_calls(method: Callable) -> Callable:
     return counter_func
 
 
+def call_history(method: Callable) -> Callable:
+    """Stores the history of inputs and outputs for a particular function"""
+    @wraps(method)
+    def store_history(self, *args, **kwargs):
+        """Performs the actual storage"""
+        input = str(args)
+        output = str(method(self, *args, **kwargs))
+        self._redis.rpush("{}:inputs".format(method.__qualname__), input)
+        self._redis.rpush("{}:outputs".formt(method.__qualname__), output)
+        return output
+    return store_history
+
+
 class Cache:
     """Class Definition"""
     def __init__(self):
@@ -27,6 +40,7 @@ class Cache:
         self._redis = redis.Redis(host="localhost", port=6379, db=0)
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Inputs data in redis using a random key and returns the key"""
