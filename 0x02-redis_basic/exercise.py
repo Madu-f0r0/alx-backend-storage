@@ -48,7 +48,7 @@ def replay(fn: Callable):
 
     inputs = r.lrange("{}:inputs".format(fxn_name), 0, -1)
     outputs = r.lrange("{}:outputs".format(fxn_name), 0, -1)
-    fr input, output in zip(inputs, outputs):
+    for input, output in zip(inputs, outputs):
         try:
             input = input.decode("utf-8")
         except Exception:
