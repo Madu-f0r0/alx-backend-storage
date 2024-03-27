@@ -3,14 +3,14 @@
 
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable, Optional
 
 
-class Cache():
+class Cache:
     """Class Definition"""
     def __init__(self):
         """The constructor method of the class Cache"""
-        self._redis = redis.Redis()
+        self._redis = redis.Redis(host="localhost", potrt=6379, db=0)
         self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
