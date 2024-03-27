@@ -26,8 +26,9 @@ def call_history(method: Callable) -> Callable:
     def store_history(self, *args, **kwargs):
         """Performs the actual storage"""
         input = str(args)
-        output = str(method(self, *args, **kwargs))
         self._redis.rpush("{}:inputs".format(method.__qualname__), input)
+
+        output = str(method(self, *args, **kwargs))
         self._redis.rpush("{}:outputs".formt(method.__qualname__), output)
         return output
     return store_history
