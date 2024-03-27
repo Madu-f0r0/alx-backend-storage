@@ -12,12 +12,12 @@ def count_calls(method: Callable) -> Callable:
     key = method.__qualname__
 
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
+    def counter_func(self, *args, **kwargs):
         """Increments the count for a key everytime the method is called"""
-        self.__redis.incr(key)
+        self._redis.incr(key)
         return method(self, *args, **kwargs)
 
-    return wrapper
+    return counter_func
 
 
 class Cache:
